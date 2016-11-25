@@ -1,0 +1,153 @@
+From ac07c6a245fceb8cdf7f6983385208691a57b067 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Fri, 25 Nov 2016 12:28:05 +0100
+Subject: [PATCH] fix Makefile.in
+
+Prepare Makefile.in for upcoming changes. This is not really kosher
+for the follwing reasons:
+
+- Makefile.in is a patch auto generated during the tarball release
+process, we didn't want to deal with generating releases.
+
+- This patch comes before anything else to keep it easy to re-apply
+patches.
+
+PLEASE REMOVE/REGENERATE THIS PATCH WHEN UPGRADING THE OFONO VERSION!
+
+
+---
+ Makefile.in | 34 +++++++++++++++++++++++++---------
+ 1 file changed, 25 insertions(+), 9 deletions(-)
+
+diff --git a/Makefile.in b/Makefile.in
+index 58f2feb..c03b893 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -267,7 +267,9 @@ host_triplet = @host@
+ @ATMODEM_TRUE@	drivers/atmodem/atutil.h \
+ @ATMODEM_TRUE@	drivers/ubloxmodem/ubloxmodem.h \
+ @ATMODEM_TRUE@	drivers/ubloxmodem/ubloxmodem.c \
+-@ATMODEM_TRUE@	drivers/ubloxmodem/gprs-context.c
++@ATMODEM_TRUE@	drivers/ubloxmodem/gprs-context.c \
++@ATMODEM_TRUE@	drivers/ubloxmodem/netmon.c \
++@ATMODEM_TRUE@	drivers/ubloxmodem/lte.c
+ @ATMODEM_TRUE@@PHONESIM_TRUE@am__append_13 = phonesim
+ @ATMODEM_TRUE@@PHONESIM_TRUE@am__append_14 = plugins/phonesim.c
+ @ATMODEM_TRUE@@DATAFILES_TRUE@@PHONESIM_TRUE@am__append_15 = plugins/phonesim.conf
+@@ -593,7 +595,8 @@ am__src_ofonod_SOURCES_DIST = plugins/udev.c plugins/udevng.c \
+ 	drivers/speedupmodem/speedupmodem.c \
+ 	drivers/speedupmodem/ussd.c drivers/ubloxmodem/ubloxmodem.h \
+ 	drivers/ubloxmodem/ubloxmodem.c \
+-	drivers/ubloxmodem/gprs-context.c plugins/phonesim.c \
++	drivers/ubloxmodem/gprs-context.c drivers/ubloxmodem/netmon.c \
++	drivers/ubloxmodem/lte.c plugins/phonesim.c \
+ 	drivers/cdmamodem/cdmamodem.h drivers/cdmamodem/cdmamodem.c \
+ 	drivers/cdmamodem/voicecall.c drivers/cdmamodem/devinfo.c \
+ 	drivers/cdmamodem/connman.c plugins/g1.c plugins/wavecom.c \
+@@ -648,7 +651,7 @@ am__src_ofonod_SOURCES_DIST = plugins/udev.c plugins/udevng.c \
+ 	src/cdma-smsutil.c src/cdma-sms.c src/private-network.c \
+ 	src/cdma-netreg.c src/cdma-provision.c src/handsfree.c \
+ 	src/handsfree-audio.c src/bluetooth.h src/hfp.h src/siri.c \
+-	src/netmon.c
++	src/netmon.c src/lte.c
+ @UDEV_TRUE@am__objects_4 = plugins/udev.$(OBJEXT) \
+ @UDEV_TRUE@	plugins/udevng.$(OBJEXT)
+ am__objects_5 = gril/gril.$(OBJEXT) gril/grilio.$(OBJEXT) \
+@@ -792,7 +795,9 @@ am__objects_7 = gisi/client.$(OBJEXT) gisi/iter.$(OBJEXT) \
+ @ATMODEM_TRUE@	drivers/speedupmodem/speedupmodem.$(OBJEXT) \
+ @ATMODEM_TRUE@	drivers/speedupmodem/ussd.$(OBJEXT) \
+ @ATMODEM_TRUE@	drivers/ubloxmodem/ubloxmodem.$(OBJEXT) \
+-@ATMODEM_TRUE@	drivers/ubloxmodem/gprs-context.$(OBJEXT)
++@ATMODEM_TRUE@	drivers/ubloxmodem/gprs-context.$(OBJEXT) \
++@ATMODEM_TRUE@	drivers/ubloxmodem/netmon.$(OBJEXT) \
++@ATMODEM_TRUE@	drivers/ubloxmodem/lte.$(OBJEXT)
+ @ATMODEM_TRUE@@PHONESIM_TRUE@am__objects_12 =  \
+ @ATMODEM_TRUE@@PHONESIM_TRUE@	plugins/phonesim.$(OBJEXT)
+ @ATMODEM_TRUE@@CDMAMODEM_TRUE@am__objects_13 = drivers/cdmamodem/cdmamodem.$(OBJEXT) \
+@@ -881,7 +886,7 @@ am_src_ofonod_OBJECTS = $(am__objects_22) $(am__objects_1) \
+ 	src/private-network.$(OBJEXT) src/cdma-netreg.$(OBJEXT) \
+ 	src/cdma-provision.$(OBJEXT) src/handsfree.$(OBJEXT) \
+ 	src/handsfree-audio.$(OBJEXT) src/siri.$(OBJEXT) \
+-	src/netmon.$(OBJEXT)
++	src/netmon.$(OBJEXT) src/lte.$(OBJEXT)
+ src_ofonod_OBJECTS = $(am_src_ofonod_OBJECTS)
+ src_ofonod_DEPENDENCIES = gdbus/libgdbus-internal.la \
+ 	$(am__DEPENDENCIES_2)
+@@ -1493,7 +1498,7 @@ pkginclude_HEADERS = include/log.h include/plugin.h include/history.h \
+ 			include/private-network.h include/cdma-netreg.h \
+ 			include/cdma-provision.h include/handsfree.h \
+ 			include/handsfree-audio.h include/siri.h \
+-			include/netmon.h
++			include/netmon.h include/lte.h
+ 
+ nodist_pkginclude_HEADERS = include/version.h
+ local_headers = $(foreach file,$(pkginclude_HEADERS) \
+@@ -1605,7 +1610,7 @@ src_ofonod_SOURCES = $(builtin_sources) $(gatchat_sources) src/ofono.ver \
+ 			src/cdma-provision.c src/handsfree.c \
+ 			src/handsfree-audio.c src/bluetooth.h \
+ 			src/hfp.h src/siri.c \
+-			src/netmon.c
++			src/netmon.c src/lte.c
+ 
+ src_ofonod_LDADD = gdbus/libgdbus-internal.la $(builtin_libadd) \
+ 			@GLIB_LIBS@ @DBUS_LIBS@ -ldl
+@@ -1645,7 +1650,8 @@ doc_files = doc/overview.txt doc/ofono-paper.txt doc/release-faq.txt \
+ 			doc/certification.txt doc/siri-api.txt \
+ 			doc/telit-modem.txt \
+ 			doc/networkmonitor-api.txt \
+-			doc/allowed-apns-api.txt
++			doc/allowed-apns-api.txt \
++			doc/lte-api.txt
+ 
+ test_scripts = test/backtrace \
+ 		test/create-internet-context \
+@@ -1744,7 +1750,8 @@ test_scripts = test/backtrace \
+ 		test/set-sms-smsc \
+ 		test/set-sms-bearer \
+ 		test/get-serving-cell-info \
+-		test/list-allowed-access-points
++		test/list-allowed-access-points \
++		test/set-lte-property
+ 
+ @TEST_TRUE@testdir = $(pkglibdir)/test
+ @TEST_TRUE@test_SCRIPTS = $(test_scripts)
+@@ -2626,6 +2633,11 @@ drivers/ubloxmodem/ubloxmodem.$(OBJEXT):  \
+ drivers/ubloxmodem/gprs-context.$(OBJEXT):  \
+ 	drivers/ubloxmodem/$(am__dirstamp) \
+ 	drivers/ubloxmodem/$(DEPDIR)/$(am__dirstamp)
++drivers/ubloxmodem/netmon.$(OBJEXT):  \
++	drivers/ubloxmodem/$(am__dirstamp) \
++	drivers/ubloxmodem/$(DEPDIR)/$(am__dirstamp)
++drivers/ubloxmodem/lte.$(OBJEXT): drivers/ubloxmodem/$(am__dirstamp) \
++	drivers/ubloxmodem/$(DEPDIR)/$(am__dirstamp)
+ plugins/phonesim.$(OBJEXT): plugins/$(am__dirstamp) \
+ 	plugins/$(DEPDIR)/$(am__dirstamp)
+ drivers/cdmamodem/$(am__dirstamp):
+@@ -2843,6 +2855,7 @@ src/handsfree-audio.$(OBJEXT): src/$(am__dirstamp) \
+ src/siri.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+ src/netmon.$(OBJEXT): src/$(am__dirstamp) \
+ 	src/$(DEPDIR)/$(am__dirstamp)
++src/lte.$(OBJEXT): src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+ 
+ src/ofonod$(EXEEXT): $(src_ofonod_OBJECTS) $(src_ofonod_DEPENDENCIES) $(EXTRA_src_ofonod_DEPENDENCIES) src/$(am__dirstamp)
+ 	@rm -f src/ofonod$(EXEEXT)
+@@ -3189,6 +3202,8 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/telitmodem/$(DEPDIR)/location-reporting.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/telitmodem/$(DEPDIR)/telitmodem.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/ubloxmodem/$(DEPDIR)/gprs-context.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@drivers/ubloxmodem/$(DEPDIR)/lte.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@drivers/ubloxmodem/$(DEPDIR)/netmon.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/ubloxmodem/$(DEPDIR)/ubloxmodem.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/ztemodem/$(DEPDIR)/radio-settings.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@drivers/ztemodem/$(DEPDIR)/ztemodem.Po@am__quote@
+@@ -3330,6 +3345,7 @@ distclean-compile:
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/idmap.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/location-reporting.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/log.Po@am__quote@
++@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/lte.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/main.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/manager.Po@am__quote@
+ @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/message-waiting.Po@am__quote@
+-- 
+2.10.2
+
