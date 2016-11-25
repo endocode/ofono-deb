@@ -1,0 +1,99 @@
+From 491d451be496d3fd698229ebb9e04a8a4e7c7792 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 20 Oct 2016 12:51:24 +0200
+Subject: [PATCH 04/58] ubloxmodem: move include headers to ubloxutil.h
+
+This is a preparation patch for the netmon driver. These headers
+will be shared by both netmon and gprs drivers so move them to ubloxutil.h
+and only include ubloxmodem.h from each unit.
+
+Change-Id: Iafe5edf74dbdbb106935e5d0429edb897fe37b81
+---
+ Makefile.am                       |  3 +--
+ drivers/ubloxmodem/gprs-context.c |  3 ---
+ drivers/ubloxmodem/ubloxmodem.h   |  2 +-
+ drivers/ubloxmodem/ubloxutil.h    | 31 +++++++++++++++++++++++++++++++
+ 4 files changed, 33 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/ubloxmodem/ubloxutil.h
+
+diff --git a/Makefile.am b/Makefile.am
+index 8ab9851..3159810 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -378,8 +378,7 @@ builtin_sources += drivers/atmodem/atutil.h \
+ 			drivers/speedupmodem/ussd.c
+ 
+ builtin_modules += ubloxmodem
+-builtin_sources += drivers/atmodem/atutil.h \
+-			drivers/ubloxmodem/ubloxmodem.h \
++builtin_sources += drivers/ubloxmodem/ubloxmodem.h \
+ 			drivers/ubloxmodem/ubloxmodem.c \
+ 			drivers/ubloxmodem/gprs-context.c
+ 
+diff --git a/drivers/ubloxmodem/gprs-context.c b/drivers/ubloxmodem/gprs-context.c
+index 7ef05b7..774dc6d 100644
+--- a/drivers/ubloxmodem/gprs-context.c
++++ b/drivers/ubloxmodem/gprs-context.c
+@@ -36,9 +36,6 @@
+ #include <ofono/modem.h>
+ #include <ofono/gprs-context.h>
+ 
+-#include "gatchat.h"
+-#include "gatresult.h"
+-
+ #include "ubloxmodem.h"
+ 
+ static const char *none_prefix[] = { NULL };
+diff --git a/drivers/ubloxmodem/ubloxmodem.h b/drivers/ubloxmodem/ubloxmodem.h
+index 0c8a621..ed2a7c3 100644
+--- a/drivers/ubloxmodem/ubloxmodem.h
++++ b/drivers/ubloxmodem/ubloxmodem.h
+@@ -19,7 +19,7 @@
+  *
+  */
+ 
+-#include <drivers/atmodem/atutil.h>
++#include "ubloxutil.h"
+ 
+ extern void ublox_gprs_context_init(void);
+ extern void ublox_gprs_context_exit(void);
+diff --git a/drivers/ubloxmodem/ubloxutil.h b/drivers/ubloxmodem/ubloxutil.h
+new file mode 100644
+index 0000000..453b906
+--- /dev/null
++++ b/drivers/ubloxmodem/ubloxutil.h
+@@ -0,0 +1,31 @@
++/*
++ *
++ *  oFono - Open Source Telephony
++ *
++ *  Copyright (C) 2016  Endocode AG. All rights reserved.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License version 2 as
++ *  published by the Free Software Foundation.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++ *
++ */
++
++#ifndef UBLOXUTIL_H
++#define UBLOXUTIL_H
++
++#include <stdio.h>
++
++#include "gatchat.h"
++#include "gatresult.h"
++#include "drivers/atmodem/atutil.h"
++
++#endif
+-- 
+2.7.4
+

@@ -1,0 +1,108 @@
+From eac204a60e7410a6565c0179572bb769e3f0cc42 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Fri, 18 Nov 2016 17:33:40 +0100
+Subject: [PATCH 52/58] gprs: lte: set attached after successful activation
+
+Otherwise the attached state gets to be set before the actual LTE
+automatic context is ready. This triggers a race between connman
+and ofono: connman sees status attached before the context is active
+so connman will try to activate another context with same apn and will
+fail over and over again.
+
+Change-Id: Ibe52a8426ec2af25f1360fd73aa552d54bd87908
+---
+ src/gprs.c | 49 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
+
+diff --git a/src/gprs.c b/src/gprs.c
+index 6cdfea0..d7caca3 100644
+--- a/src/gprs.c
++++ b/src/gprs.c
+@@ -948,6 +948,24 @@ static void pri_deactivate_callback(const struct ofono_error *error, void *data)
+ 					"Active", DBUS_TYPE_BOOLEAN, &value);
+ }
+ 
++static void gprs_set_attached_property(struct ofono_gprs *gprs,
++					ofono_bool_t attached)
++{
++	const char *path;
++	DBusConnection *conn = ofono_dbus_get_connection();
++	dbus_bool_t value = attached;
++
++	if (gprs->attached == attached)
++		return;
++
++	gprs->attached = attached;
++
++	path = __ofono_atom_get_path(gprs->atom);
++	ofono_dbus_signal_property_changed(conn, path,
++				OFONO_CONNECTION_MANAGER_INTERFACE,
++				"Attached", DBUS_TYPE_BOOLEAN, &value);
++}
++
+ static void pri_read_settings_callback(const struct ofono_error *error,
+ 					void *data)
+ {
+@@ -976,6 +994,9 @@ static void pri_read_settings_callback(const struct ofono_error *error,
+ 	}
+ 
+ 	value = pri_ctx->active;
++
++	gprs_set_attached_property(pri_ctx->gprs, TRUE);
++
+ 	ofono_dbus_signal_property_changed(conn, pri_ctx->path,
+ 					OFONO_CONNECTION_CONTEXT_INTERFACE,
+ 					"Active", DBUS_TYPE_BOOLEAN, &value);
+@@ -1585,24 +1606,6 @@ static void release_active_contexts(struct ofono_gprs *gprs)
+ 	}
+ }
+ 
+-static void gprs_set_attached_property(struct ofono_gprs *gprs,
+-					ofono_bool_t attached)
+-{
+-	const char *path;
+-	DBusConnection *conn = ofono_dbus_get_connection();
+-	dbus_bool_t value = attached;
+-
+-	if (gprs->attached == attached)
+-		return;
+-
+-	gprs->attached = attached;
+-
+-	path = __ofono_atom_get_path(gprs->atom);
+-	ofono_dbus_signal_property_changed(conn, path,
+-				OFONO_CONNECTION_MANAGER_INTERFACE,
+-				"Attached", DBUS_TYPE_BOOLEAN, &value);
+-}
+-
+ static void gprs_attached_update(struct ofono_gprs *gprs)
+ {
+ 	ofono_bool_t attached;
+@@ -1706,11 +1709,12 @@ static void gprs_netreg_update(struct ofono_gprs *gprs)
+ 	DBG("attach: %u, driver_attached: %u", attach, gprs->driver_attached);
+ 
+ 	if (ofono_netreg_get_technology(gprs->netreg) ==
+-			ACCESS_TECHNOLOGY_EUTRAN) {
+-		/* Ignore attach logic for LTE. There is no such concept. */
+-		gprs_set_attached_property(gprs, attach);
++			ACCESS_TECHNOLOGY_EUTRAN)
++		/*
++		 * For LTE we set attached status only on successful
++		 * context activation.
++		 */
+ 		return;
+-	}
+ 
+ 	if (gprs->driver_attached == attach)
+ 		return;
+@@ -2016,7 +2020,6 @@ void ofono_gprs_cid_activated(struct ofono_gprs  *gprs, unsigned int cid,
+ 		pri_set_apn(pri_ctx, conn, NULL, apn);
+ 	}
+ 
+-	gprs_set_attached_property(gprs, TRUE);
+ 	gc->driver->read_settings(gc, cid, pri_read_settings_callback, pri_ctx);
+ }
+ 
+-- 
+2.7.4
+

@@ -1,0 +1,240 @@
+From 0d6801a01d9c7bb966551e15b3c6010f03c5990f Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 20 Oct 2016 13:17:44 +0200
+Subject: [PATCH 05/58] ubloxmodem: add netmon driver skeleton
+
+We plan to add some ublox specific stats.
+
+Change-Id: I04f5aa3bf310825d391384e35e9b667d239f6dae
+---
+ Makefile.am                     |   3 +-
+ drivers/ubloxmodem/netmon.c     | 144 ++++++++++++++++++++++++++++++++++++++++
+ drivers/ubloxmodem/ubloxmodem.c |   2 +
+ drivers/ubloxmodem/ubloxmodem.h |   5 ++
+ plugins/ublox.c                 |   3 +
+ 5 files changed, 156 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/ubloxmodem/netmon.c
+
+diff --git a/Makefile.am b/Makefile.am
+index 3159810..43272c6 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -380,7 +380,8 @@ builtin_sources += drivers/atmodem/atutil.h \
+ builtin_modules += ubloxmodem
+ builtin_sources += drivers/ubloxmodem/ubloxmodem.h \
+ 			drivers/ubloxmodem/ubloxmodem.c \
+-			drivers/ubloxmodem/gprs-context.c
++			drivers/ubloxmodem/gprs-context.c \
++			drivers/ubloxmodem/netmon.c
+ 
+ 
+ if PHONESIM
+diff --git a/drivers/ubloxmodem/netmon.c b/drivers/ubloxmodem/netmon.c
+new file mode 100644
+index 0000000..7a10c05
+--- /dev/null
++++ b/drivers/ubloxmodem/netmon.c
+@@ -0,0 +1,144 @@
++/*
++ *
++ *  oFono - Open Source Telephony
++ *
++ *  Copyright (C) 2016  EndoCode AG. All rights reserved.
++ *
++ *  This program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License version 2 as
++ *  published by the Free Software Foundation.
++ *
++ *  This program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with this program; if not, write to the Free Software
++ *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
++ *
++ */
++
++#ifdef HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#define _GNU_SOURCE
++#include <stdio.h>
++#include <stdlib.h>
++#include <stdint.h>
++#include <string.h>
++#include <errno.h>
++
++#include <glib.h>
++
++#include <ofono/log.h>
++#include <ofono/modem.h>
++#include <ofono/netmon.h>
++
++#include "ubloxmodem.h"
++#include "drivers/atmodem/vendor.h"
++
++struct netmon_driver_data {
++	GAtChat *modem;
++	GAtChat *aux;
++};
++
++struct req_cb_data {
++	struct ofono_netmon *netmon;
++
++	ofono_netmon_cb_t cb;
++	void *data;
++};
++
++static inline struct req_cb_data *req_cb_data_new0(void *cb, void *data, void *user)
++{
++	struct req_cb_data *ret = g_new0(struct req_cb_data, 1);
++	if (ret) {
++		ret->cb = cb;
++		ret->data = data;
++		ret->netmon = user;
++	}
++
++	return ret;
++}
++
++static gboolean ublox_delayed_register(gpointer user_data)
++{
++	struct ofono_netmon *netmon = user_data;
++
++	ofono_netmon_register(netmon);
++
++	return FALSE;
++}
++
++static void ublox_netmon_request_update(struct ofono_netmon *netmon,
++					ofono_netmon_cb_t cb, void *data)
++{
++	struct req_cb_data *cbd;
++
++	DBG("ublox netmon request update");
++
++	cbd = req_cb_data_new0(cb, data, netmon);
++	if (!cbd) {
++		CALLBACK_WITH_FAILURE(cb, data);
++		return;
++	}
++
++	CALLBACK_WITH_SUCCESS(cb, data);
++	g_free(cbd);
++}
++
++static int ublox_netmon_probe(struct ofono_netmon *netmon,
++			      unsigned int vendor, void *user)
++{
++	struct netmon_driver_data *n = user;
++	struct netmon_driver_data *nmd;
++
++	DBG("ublox netmon probe");
++
++	nmd = g_try_new0(struct netmon_driver_data, 1);
++	if (!nmd) {
++		return -ENOMEM;
++	}
++
++	nmd->modem = g_at_chat_clone(n->modem);
++	nmd->aux = g_at_chat_clone(n->aux);
++
++	ofono_netmon_set_data(netmon, nmd);
++
++	g_idle_add(ublox_delayed_register, netmon);
++
++	return 0;
++}
++
++static void ublox_netmon_remove(struct ofono_netmon *netmon)
++{
++	struct netmon_driver_data *nmd = ofono_netmon_get_data(netmon);
++
++	DBG("ublox netmon remove");
++
++	ofono_netmon_set_data(netmon, NULL);
++
++	g_at_chat_unref(nmd->modem);
++	g_at_chat_unref(nmd->aux);
++
++	g_free(nmd);
++}
++
++static struct ofono_netmon_driver driver = {
++	.name			= UBLOXMODEM,
++	.probe			= ublox_netmon_probe,
++	.remove			= ublox_netmon_remove,
++	.request_update		= ublox_netmon_request_update,
++};
++
++void ublox_netmon_init(void)
++{
++	ofono_netmon_driver_register(&driver);
++}
++
++void ublox_netmon_exit(void)
++{
++	ofono_netmon_driver_unregister(&driver);
++}
+diff --git a/drivers/ubloxmodem/ubloxmodem.c b/drivers/ubloxmodem/ubloxmodem.c
+index 7fc671e..37d9c40 100644
+--- a/drivers/ubloxmodem/ubloxmodem.c
++++ b/drivers/ubloxmodem/ubloxmodem.c
+@@ -35,6 +35,7 @@
+ static int ubloxmodem_init(void)
+ {
+ 	ublox_gprs_context_init();
++	ublox_netmon_init();
+ 
+ 	return 0;
+ }
+@@ -42,6 +43,7 @@ static int ubloxmodem_init(void)
+ static void ubloxmodem_exit(void)
+ {
+ 	ublox_gprs_context_exit();
++	ublox_netmon_exit();
+ }
+ 
+ OFONO_PLUGIN_DEFINE(ubloxmodem, "U-Blox Toby L2 high speed modem driver",
+diff --git a/drivers/ubloxmodem/ubloxmodem.h b/drivers/ubloxmodem/ubloxmodem.h
+index ed2a7c3..ce54771 100644
+--- a/drivers/ubloxmodem/ubloxmodem.h
++++ b/drivers/ubloxmodem/ubloxmodem.h
+@@ -21,5 +21,10 @@
+ 
+ #include "ubloxutil.h"
+ 
++#define UBLOXMODEM "ubloxmodem"
++
+ extern void ublox_gprs_context_init(void);
+ extern void ublox_gprs_context_exit(void);
++
++extern void ublox_netmon_init(void);
++extern void ublox_netmon_exit(void);
+diff --git a/plugins/ublox.c b/plugins/ublox.c
+index 092ba64..15ec417 100644
+--- a/plugins/ublox.c
++++ b/plugins/ublox.c
+@@ -38,6 +38,7 @@
+ #include <ofono/sim.h>
+ #include <ofono/gprs.h>
+ #include <ofono/gprs-context.h>
++#include <ofono/netmon.h>
+ 
+ #include <drivers/atmodem/atutil.h>
+ #include <drivers/atmodem/vendor.h>
+@@ -320,6 +321,8 @@ static void ublox_post_online(struct ofono_modem *modem)
+ 	struct ublox_data *data = ofono_modem_get_data(modem);
+ 
+ 	ofono_netreg_create(modem, data->vendor_family, "atmodem", data->aux);
++
++	ofono_netmon_create(modem, data->vendor_family, "ubloxmodem", data);
+ }
+ 
+ static struct ofono_modem_driver ublox_driver = {
+-- 
+2.7.4
+

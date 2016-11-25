@@ -1,0 +1,24 @@
+From 339105a2019d60f8be4b057cb0d9f07b7399582f Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Thu, 10 Nov 2016 17:55:48 +0100
+Subject: [PATCH 33/58] include: add LTE dbus service define
+
+---
+ include/dbus.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/dbus.h b/include/dbus.h
+index 99d45d6..cf68ae5 100644
+--- a/include/dbus.h
++++ b/include/dbus.h
+@@ -61,6 +61,7 @@ extern "C" {
+ #define OFONO_HANDSFREE_INTERFACE OFONO_SERVICE ".Handsfree"
+ #define OFONO_SIRI_INTERFACE OFONO_SERVICE ".Siri"
+ #define OFONO_NETMON_INTERFACE OFONO_SERVICE ".NetworkMonitor"
++#define OFONO_LTE_INTERFACE OFONO_SERVICE ".LongTermEvolution"
+ 
+ /* CDMA Interfaces */
+ #define OFONO_CDMA_VOICECALL_MANAGER_INTERFACE "org.ofono.cdma.VoiceCallManager"
+-- 
+2.7.4
+

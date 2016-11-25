@@ -1,0 +1,34 @@
+From a19f07c108e3175d58c1ab6e19acaf5ccfe15233 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Tue, 15 Nov 2016 15:08:20 +0100
+Subject: [PATCH 48/58] plugins: ublox: enable lte driver for tobyl2
+
+Change-Id: I3bb764ee32b9404d6022b1fea8a10026947e367e
+---
+ plugins/ublox.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/plugins/ublox.c b/plugins/ublox.c
+index 15ec417..cc44de4 100644
+--- a/plugins/ublox.c
++++ b/plugins/ublox.c
+@@ -39,6 +39,7 @@
+ #include <ofono/gprs.h>
+ #include <ofono/gprs-context.h>
+ #include <ofono/netmon.h>
++#include <ofono/lte.h>
+ 
+ #include <drivers/atmodem/atutil.h>
+ #include <drivers/atmodem/vendor.h>
+@@ -314,6 +315,8 @@ static void ublox_post_sim(struct ofono_modem *modem)
+ 
+ 		--ncontexts;
+ 	}
++
++	ofono_lte_create(modem, "ubloxmodem", data->aux);
+ }
+ 
+ static void ublox_post_online(struct ofono_modem *modem)
+-- 
+2.7.4
+

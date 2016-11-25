@@ -1,0 +1,31 @@
+From e289ca80b5eb5cc8e1bbf658c7ae5318a55364e2 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 10 Nov 2016 11:53:34 +0100
+Subject: [PATCH 17/58] netmon: Add OFONO_NETMON_INFO_EARFCN and rename
+ OFONO_NETMON_INFO_LBAND for ublox
+
+Add OFONO_NETMON_INFO_EARFCN for ubloxmodem and rename
+OFONO_NETMON_INFO_BAND to OFONO_NETMON_INFO_LBAND
+
+Change-Id: I4f65cf8941c65f838f7c4188779d7a4191ca7bcf
+---
+ include/netmon.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/netmon.h b/include/netmon.h
+index c6ee243..1e380c9 100644
+--- a/include/netmon.h
++++ b/include/netmon.h
+@@ -64,7 +64,8 @@ enum ofono_netmon_info {
+ 	OFONO_NETMON_INFO_RSRQ, /* int */
+ 	OFONO_NETMON_INFO_RSRP, /* int */
+ 	OFONO_NETMON_INFO_OPERATOR, /* char *, up to 24 digits */
+-	OFONO_NETMON_INFO_BAND, /* int */
++	OFONO_NETMON_INFO_EARFCN, /* int */
++	OFONO_NETMON_INFO_LBAND, /* int */
+ 	OFONO_NETMON_INFO_UL_BW, /* int */
+ 	OFONO_NETMON_INFO_DL_BW, /* int */
+ 	OFONO_NETMON_INFO_TAC, /* int */
+-- 
+2.7.4
+

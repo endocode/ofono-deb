@@ -1,0 +1,31 @@
+From ed615f698aa8ee6bb4d1b57666dd506e53fa7c2c Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 10 Nov 2016 11:56:57 +0100
+Subject: [PATCH 19/58] ubloxmodem:netmon: push OFONO_NETMON_INFO_EARFCN and
+ OFONO_NETMON_INFO_LBAND
+
+Push OFONO_NETMON_INFO_EARFCN and OFONO_NETMON_INFO_LBAND data to D-Bus
+
+Change-Id: Ib46f3207d25db320b51f57c764a306b330f744d1
+---
+ drivers/ubloxmodem/netmon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/ubloxmodem/netmon.c b/drivers/ubloxmodem/netmon.c
+index f32f5e0..6bdb08b 100644
+--- a/drivers/ubloxmodem/netmon.c
++++ b/drivers/ubloxmodem/netmon.c
+@@ -156,8 +156,8 @@ static void ublox_netmon_finish_success(struct req_cb_data *cbd)
+ 					 OFONO_NETMON_INFO_ECN0, cbd->ecn0,
+ 					 OFONO_NETMON_INFO_RSRQ, cbd->rsrq,
+ 					 OFONO_NETMON_INFO_RSRP, cbd->rsrp,
+-					 OFONO_NETMON_INFO_ARFCN, cbd->earfcn,
+-					 OFONO_NETMON_INFO_BAND, cbd->lband,
++					 OFONO_NETMON_INFO_EARFCN, cbd->earfcn,
++					 OFONO_NETMON_INFO_LBAND, cbd->lband,
+ 					 OFONO_NETMON_INFO_UL_BW, cbd->ul_BW,
+ 					 OFONO_NETMON_INFO_DL_BW, cbd->dl_BW,
+ 					 OFONO_NETMON_INFO_TAC, cbd->tac,
+-- 
+2.7.4
+

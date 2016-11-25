@@ -1,0 +1,40 @@
+From 1bd1daa06cbec75f7eaf9ae3c388c91008d3e3ee Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 10 Nov 2016 11:55:26 +0100
+Subject: [PATCH 18/58] netmon: handle OFONO_NETMON_INFO_EARFCN and
+ OFONO_NETMON_INFO_LBAND
+
+Handle OFONO_NETMON_INFO_EARFCN and OFONO_NETMON_INFO_LBAND in D-Bus
+
+Change-Id: I227a25cca7d624ae968432dc3686ea89fec0e1b8
+---
+ src/netmon.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/src/netmon.c b/src/netmon.c
+index 6faf8a1..44dc583 100644
+--- a/src/netmon.c
++++ b/src/netmon.c
+@@ -218,10 +218,17 @@ void ofono_netmon_serving_cell_notify(struct ofono_netmon *netmon,
+ 						DBUS_TYPE_STRING, &op);
+ 			break;
+ 
+-		case OFONO_NETMON_INFO_BAND:
++		case OFONO_NETMON_INFO_EARFCN:
+ 			intval = va_arg(arglist, int);
+ 
+-			CELL_INFO_DICT_APPEND(&dict, "Band",
++			CELL_INFO_DICT_APPEND(&dict, "EARFCN",
++					intval, uint16_t, DBUS_TYPE_UINT16);
++			break;
++
++		case OFONO_NETMON_INFO_LBAND:
++			intval = va_arg(arglist, int);
++
++			CELL_INFO_DICT_APPEND(&dict, "LBand",
+ 					intval, uint8_t, DBUS_TYPE_BYTE);
+ 			break;
+ 
+-- 
+2.7.4
+

@@ -1,0 +1,26 @@
+From 04aadfe9c84887109ce11e1d5aadd962f73248de Mon Sep 17 00:00:00 2001
+From: Denis Kenzior <denkenz@gmail.com>
+Date: Fri, 11 Nov 2016 10:48:47 -0600
+Subject: [PATCH 38/58] build: Add lte-api.txt
+
+---
+ Makefile.am | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 43272c6..abf4c0c 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -651,7 +651,8 @@ doc_files = doc/overview.txt doc/ofono-paper.txt doc/release-faq.txt \
+ 			doc/certification.txt doc/siri-api.txt \
+ 			doc/telit-modem.txt \
+ 			doc/networkmonitor-api.txt \
+-			doc/allowed-apns-api.txt
++			doc/allowed-apns-api.txt \
++			doc/lte-api.txt
+ 
+ 
+ test_scripts = test/backtrace \
+-- 
+2.7.4
+

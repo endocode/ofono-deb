@@ -1,0 +1,27 @@
+From 0c4f5d5dd9b92b458d364965c588e81fc3197c9e Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Thu, 17 Nov 2016 11:46:05 +0100
+Subject: [PATCH 51/58] gprs: set attached property on lte auto attach
+
+Needed for interaction with connman.
+
+Change-Id: Iab4309aeaa77d231c674876cd2ad90eed3a97299
+---
+ src/gprs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/gprs.c b/src/gprs.c
+index 3a4a819..6cdfea0 100644
+--- a/src/gprs.c
++++ b/src/gprs.c
+@@ -2016,6 +2016,7 @@ void ofono_gprs_cid_activated(struct ofono_gprs  *gprs, unsigned int cid,
+ 		pri_set_apn(pri_ctx, conn, NULL, apn);
+ 	}
+ 
++	gprs_set_attached_property(gprs, TRUE);
+ 	gc->driver->read_settings(gc, cid, pri_read_settings_callback, pri_ctx);
+ }
+ 
+-- 
+2.7.4
+

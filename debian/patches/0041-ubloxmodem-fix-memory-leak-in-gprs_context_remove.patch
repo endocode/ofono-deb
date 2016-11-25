@@ -1,0 +1,24 @@
+From f6d08e11dd255b8086c9e751dd4fd415348588c9 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Mon, 14 Nov 2016 16:24:34 +0100
+Subject: [PATCH 41/58] ubloxmodem: fix memory leak in gprs_context_remove
+
+---
+ drivers/ubloxmodem/gprs-context.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/ubloxmodem/gprs-context.c b/drivers/ubloxmodem/gprs-context.c
+index 774dc6d..1ebda84 100644
+--- a/drivers/ubloxmodem/gprs-context.c
++++ b/drivers/ubloxmodem/gprs-context.c
+@@ -439,6 +439,7 @@ static void ublox_gprs_context_remove(struct ofono_gprs_context *gc)
+ 	g_at_chat_unref(gcd->chat);
+ 
+ 	memset(gcd, 0, sizeof(*gcd));
++	g_free(gcd);
+ }
+ 
+ static struct ofono_gprs_context_driver driver = {
+-- 
+2.7.4
+

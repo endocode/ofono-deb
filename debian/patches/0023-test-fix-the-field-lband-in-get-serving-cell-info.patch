@@ -1,0 +1,26 @@
+From a0d4e99b8deb247e9bcb042ee88a460a0607cd05 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 11:26:00 +0100
+Subject: [PATCH 23/58] test: fix the field lband in get-serving-cell-info
+
+Change-Id: Ib05b17957d41b07da78a9d14192d339f15b073d7
+---
+ test/get-serving-cell-info | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 298398f..e12bd7e 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -89,7 +89,7 @@ if earfcn in servingcell:
+ 	print("    [ E-UTRAN Absolue Radio Frequency Channel = %d ]" % (servingcell[earfcn]))
+ 
+ if lband in servingcell:
+-	print("    [ LBand = %d ]" % (servingcell[Lband]))
++	print("    [ LBand = %d ]" % (servingcell[lband]))
+ 
+ if ul_BW in servingcell:
+ 	print("    [ Uplink Resource Blocks = %d ]" % (servingcell[ul_BW]))
+-- 
+2.7.4
+

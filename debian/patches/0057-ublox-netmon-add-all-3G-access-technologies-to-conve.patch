@@ -1,0 +1,28 @@
+From c70c7c1c8d28a233d8596a283c35f3838be0184d Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Mon, 21 Nov 2016 18:15:25 +0100
+Subject: [PATCH 57/58] ublox/netmon: add all 3G access technologies to
+ convertor
+
+Change-Id: I21cd289be37a8470959c7ba86345c0afd2e74fb7
+---
+ drivers/ubloxmodem/netmon.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/ubloxmodem/netmon.c b/drivers/ubloxmodem/netmon.c
+index a800481..7690e2a 100644
+--- a/drivers/ubloxmodem/netmon.c
++++ b/drivers/ubloxmodem/netmon.c
+@@ -95,6 +95,9 @@ static int ublox_map_radio_access_technology(int tech)
+ 	case ACCESS_TECHNOLOGY_GSM_COMPACT:
+ 		return OFONO_NETMON_CELL_TYPE_GSM;
+ 	case ACCESS_TECHNOLOGY_UTRAN:
++	case ACCESS_TECHNOLOGY_UTRAN_HSDPA:
++	case ACCESS_TECHNOLOGY_UTRAN_HSUPA:
++	case ACCESS_TECHNOLOGY_UTRAN_HSDPA_HSUPA:
+ 		return OFONO_NETMON_CELL_TYPE_UMTS;
+ 	case ACCESS_TECHNOLOGY_EUTRAN:
+ 		return OFONO_NETMON_CELL_TYPE_LTE;
+-- 
+2.7.4
+

@@ -1,0 +1,29 @@
+From 466d8fd07023c4264f6f336a2203e3eee4475b82 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 17 Nov 2016 15:45:48 +0100
+Subject: [PATCH 56/58] ubloxmodem: UpLinkResourceBlocks and
+ DownLinkResourceBlocks with uppercase L
+
+Change-Id: Ib3e87b45a41f31c8b8ec165d82eab50a7c0ed55e
+---
+ test/get-serving-cell-info | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 3edfaa4..f122f6b 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -34,8 +34,8 @@ rsrp = 'ReferenceSignalReceivedPower'
+ op = 'Operator'
+ earfcn = 'EARFCN'
+ lband = 'LBand'
+-ul_BW = 'UplinkResourceBlocks'
+-dl_BW = 'DownlinkResourceBlocks'
++ul_BW = 'UpLinkResourceBlocks'
++dl_BW = 'DownLinkResourceBlocks'
+ tac = 'TrackingAreaCode'
+ lcellid = 'E-UTRANCellId'
+ lsinr = 'E-UTRANSignalNoiseRatio'
+-- 
+2.7.4
+

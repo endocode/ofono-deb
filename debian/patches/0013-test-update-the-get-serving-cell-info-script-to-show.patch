@@ -1,0 +1,66 @@
+From c89e4340f9e4be76ff6f0825e80bb61429f24223 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Mon, 7 Nov 2016 14:34:18 +0100
+Subject: [PATCH 13/58] test: update the get-serving-cell-info script to show
+ +UCGED results
+
+This updates the get-serving-cell-info script to display some +UCGED
+results.
+
+Change-Id: Ibdc77f5f862437c1927fe33fcfed85a04aa06aa1
+---
+ test/get-serving-cell-info | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 92434a0..62265ac 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -32,6 +32,14 @@ ecn0 = 'ReceivedEnergyRatio'
+ rsrq = 'ReferenceSignalReceivedQuality'
+ rsrp = 'ReferenceSignalReceivedPower'
+ op = 'Operator'
++arfcn = 'ARFCN'
++band = 'Band'
++ul_BW = 'UplinkResourceBlocks'
++dl_BW = 'DownlinkResourceBlocks'
++tac = 'TrackingAreaCode'
++sinr = 'SignalNoiseRatio'
++cqi = 'ChannelQuality'
++avg_rsrp = 'AverageRSRP'
+ 
+ print("Current serving cell information:")
+ 
+@@ -77,4 +85,29 @@ if rsrp in servingcell:
+ if op in servingcell:
+ 	print("    [ Operator = %s ]" % (servingcell[op]))
+ 
++if arfcn in servingcell:
++	print("    [ Absolue Radio Frequency Channel = %d ]" % (servingcell[arfcn]))
++
++if band in servingcell:
++	print("    [ Band = %d ]" % (servingcell[band]))
++
++if ul_BW in servingcell:
++	print("    [ Uplink Resource Blocks = %d ]" % (servingcell[ul_BW]))
++
++if dl_BW in servingcell:
++	print("    [ Downlink Resource Blocks = %d ]" % (servingcell[dl_BW]))
++
++if tac in servingcell:
++	print("    [ Tracking Area Code = %d ]" % (servingcell[tac]))
++
++if sinr in servingcell:
++	print("    [ Signal to Interference and Noise Ratio = %d ]" % (servingcell[sinr]))
++
++if cqi in servingcell:
++	print("    [ Channel Quality Indicator = %d ]" % (servingcell[cqi]))
++
++if avg_rsrp in servingcell:
++	print("    [ Average last 10th Reference Signal Received Power = %d ]" % (servingcell[avg_rsrp]))
++
++
+ print('')
+-- 
+2.7.4
+

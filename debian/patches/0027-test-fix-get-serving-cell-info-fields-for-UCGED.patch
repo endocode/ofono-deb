@@ -1,0 +1,50 @@
+From 71523f97c522066e65b91b8b806e9735b99c288d Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 12:09:19 +0100
+Subject: [PATCH 27/58] test: fix get-serving-cell-info fields for +UCGED
+
+Fix the script to show the correct float values instead of decimals and
+update the lsinr identifier string from 'SignalNoiseRatio' to
+'E-UTRANSignalNoiseRatio'.
+
+Change-Id: I353ac0daa0402c040a37b6258ade6a160183517e
+---
+ test/get-serving-cell-info | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index e12bd7e..7acd2cd 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -37,7 +37,7 @@ lband = 'LBand'
+ ul_BW = 'UplinkResourceBlocks'
+ dl_BW = 'DownlinkResourceBlocks'
+ tac = 'TrackingAreaCode'
+-sinr = 'SignalNoiseRatio'
++lsinr = 'E-UTRANSignalNoiseRatio'
+ cqi = 'ChannelQuality'
+ avg_rsrp = 'AverageRSRP'
+ 
+@@ -74,7 +74,7 @@ if rscp in servingcell:
+ 	print("    [ Received Signal Code Power = %f]" % (servingcell[rscp]))
+ 
+ if ecn0 in servingcell:
+-	print("    [ Received Energy Ratio = %d]" % (servingcell[ecn0]))
++	print("    [ Received Energy Ratio = %f]" % (servingcell[ecn0]))
+ 
+ if rsrq in servingcell:
+ 	print("    [ Reference Signal Received Quality = %f]" % (servingcell[rsrq]))
+@@ -100,8 +100,8 @@ if dl_BW in servingcell:
+ if tac in servingcell:
+ 	print("    [ Tracking Area Code = %d ]" % (servingcell[tac]))
+ 
+-if sinr in servingcell:
+-	print("    [ Signal to Interference and Noise Ratio = %d ]" % (servingcell[sinr]))
++if lsinr in servingcell:
++	print("    [ E-UTRAN Signal to Interference and Noise Ratio = %f ]" % (servingcell[lsinr]))
+ 
+ if cqi in servingcell:
+ 	print("    [ Channel Quality Indicator = %d ]" % (servingcell[cqi]))
+-- 
+2.7.4
+

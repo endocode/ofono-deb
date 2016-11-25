@@ -1,0 +1,104 @@
+From 12585218d6899c82435e2d7fd3a48c4138c26475 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 17 Nov 2016 10:36:39 +0100
+Subject: [PATCH 55/58] ubloxmodem: send E-UTRAN CellId as the new
+ OFONO_NETMON_INFO_LCELLID type
+
+Change-Id: Ibe3c7b98a5347d18c9c76bccfa18e42bc2233152
+---
+ drivers/ubloxmodem/netmon.c | 14 +++++++-------
+ test/get-serving-cell-info  |  4 ++++
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/ubloxmodem/netmon.c b/drivers/ubloxmodem/netmon.c
+index f7eac24..a800481 100644
+--- a/drivers/ubloxmodem/netmon.c
++++ b/drivers/ubloxmodem/netmon.c
+@@ -72,7 +72,7 @@ struct req_cb_data {
+ 	int ul_BW;	/* UCGED: Uplink Resource Blocks */
+ 	int dl_BW;	/* UCGED: Downlink Resource Blocks */
+ 	int tac;	/* UCGED: Tracking Area Code */
+-	int cellid;	/* UCGED: CI */
++	int lcellid;	/* UCGED: CI */
+ 	double lsinr;	/* UCGED: E-UTRAN Signal to Interference and Noise Ratio */
+ 	int cqi;	/* UCGED: Channel Quality Indicator */
+ 	int avg_rsrp;	/* UCGED: Average last 10th RSRP */
+@@ -126,7 +126,7 @@ static inline struct req_cb_data *req_cb_data_new0(void *cb, void *data, void *u
+ 	ret->ul_BW = -1;
+ 	ret->dl_BW = -1;
+ 	ret->tac = -1;
+-	ret->cellid = -1;
++	ret->lcellid = -1;
+ 	ret->lsinr = -1;
+ 	ret->cqi = -1;
+ 	ret->avg_rsrp = -1;
+@@ -189,7 +189,7 @@ static void ublox_netmon_finish_success(struct req_cb_data *cbd)
+ 					 OFONO_NETMON_INFO_UL_BW, cbd->ul_BW,
+ 					 OFONO_NETMON_INFO_DL_BW, cbd->dl_BW,
+ 					 OFONO_NETMON_INFO_TAC, cbd->tac,
+-					 OFONO_NETMON_INFO_CI, cbd->cellid,
++					 OFONO_NETMON_INFO_LCELLID, cbd->lcellid,
+ 					 OFONO_NETMON_INFO_LSINR, cbd->lsinr,
+ 					 OFONO_NETMON_INFO_CQI, cbd->cqi,
+ 					 OFONO_NETMON_INFO_AVG_RSRP, cbd->avg_rsrp,
+@@ -280,7 +280,7 @@ static void ucged_parse_4g(struct req_cb_data *cbd, GAtResultIter *iter)
+ 			cbd->tac = number != 0xFFFF ? number : cbd->tac;
+ 			break;
+ 		case UCGED_LCELLID:
+-			cbd->cellid = number ? number : cbd->cellid;
++			cbd->lcellid = number ? number : cbd->lcellid;
+ 			break;
+ 		case UCGED_LSINR:
+ 			cbd->lsinr = number != 255 ? number : cbd->lsinr;
+@@ -301,7 +301,7 @@ static void ucged_parse_4g(struct req_cb_data *cbd, GAtResultIter *iter)
+ 	DBG(" UCGED: MODE 2 RAT = 4G	UL_BW = %d ", cbd->ul_BW);
+ 	DBG(" UCGED: MODE 2 RAT = 4G	DL_BW = %d ", cbd->dl_BW);
+ 	DBG(" UCGED: MODE 2 RAT = 4G	TAC = %x ", cbd->tac);
+-	DBG(" UCGED: MODE 2 RAT = 4G	LCELLID = %x ", cbd->cellid);
++	DBG(" UCGED: MODE 2 RAT = 4G	LCELLID = %x ", cbd->lcellid);
+ 	DBG(" UCGED: MODE 2 RAT = 4G	LSINR = %f ", cbd->lsinr);
+ 	DBG(" UCGED: MODE 2 RAT = 4G	CQI = %d ", cbd->cqi);
+ 	DBG(" UCGED: MODE 2 RAT = 4G	AVG_RSRP = %d ", cbd->avg_rsrp);
+@@ -421,7 +421,7 @@ static void ucged_collect_mode3_data(struct req_cb_data *cbd, GAtResult *result)
+ 			cbd->tac = number != 0xFFFF ? number : cbd->tac;
+ 			break;
+ 		case UCGED_LCELLID:
+-			cbd->cellid = number ? number : cbd->cellid;
++			cbd->lcellid = number ? number : cbd->lcellid;
+ 			break;
+ 		case UCGED_LSINR:
+ 			cbd->lsinr = number != 255 ? number : cbd->lsinr;
+@@ -436,7 +436,7 @@ static void ucged_collect_mode3_data(struct req_cb_data *cbd, GAtResult *result)
+ 	DBG(" UCGED: MODE 3	UL_BW = %d ", cbd->ul_BW);
+ 	DBG(" UCGED: MODE 3	DL_BW = %d ", cbd->dl_BW);
+ 	DBG(" UCGED: MODE 3	TAC = %x ", cbd->tac);
+-	DBG(" UCGED: MODE 3	LCELLID = %x ", cbd->cellid);
++	DBG(" UCGED: MODE 3	LCELLID = %x ", cbd->lcellid);
+ 	DBG(" UCGED: MODE 3	LSINR = %f ", cbd->lsinr);
+ }
+ 
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 7acd2cd..3edfaa4 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -37,6 +37,7 @@ lband = 'LBand'
+ ul_BW = 'UplinkResourceBlocks'
+ dl_BW = 'DownlinkResourceBlocks'
+ tac = 'TrackingAreaCode'
++lcellid = 'E-UTRANCellId'
+ lsinr = 'E-UTRANSignalNoiseRatio'
+ cqi = 'ChannelQuality'
+ avg_rsrp = 'AverageRSRP'
+@@ -100,6 +101,9 @@ if dl_BW in servingcell:
+ if tac in servingcell:
+ 	print("    [ Tracking Area Code = %d ]" % (servingcell[tac]))
+ 
++if lcellid in servingcell:
++	print("    [ E-UTRAN Cell Identity = %d]" % (servingcell[lcellid]))
++
+ if lsinr in servingcell:
+ 	print("    [ E-UTRAN Signal to Interference and Noise Ratio = %f ]" % (servingcell[lsinr]))
+ 
+-- 
+2.7.4
+

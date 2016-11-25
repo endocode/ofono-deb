@@ -1,0 +1,30 @@
+From 0040080a472e2d3c04428596b2a0fa6689fc4d9c Mon Sep 17 00:00:00 2001
+From: Denis Kenzior <denkenz@gmail.com>
+Date: Fri, 11 Nov 2016 10:55:00 -0600
+Subject: [PATCH 40/58] include: Fix return signature in lte methods
+
+Only the probe method returns a value.  All other methods use a void
+return signature and report errors via the callback.
+---
+ include/lte.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/lte.h b/include/lte.h
+index 26558f6..f3ff405 100644
+--- a/include/lte.h
++++ b/include/lte.h
+@@ -40,10 +40,9 @@ struct ofono_lte_driver {
+ 	const char *name;
+ 	int (*probe)(struct ofono_lte *lte, void *data);
+ 	void (*remove)(struct ofono_lte *lte);
+-	int (*set_default_attach_info)(const struct ofono_lte *lte,
++	void (*set_default_attach_info)(const struct ofono_lte *lte,
+ 			const struct ofono_lte_default_attach_info *info,
+ 			ofono_lte_cb_t cb, void *data);
+-
+ };
+ 
+ int ofono_lte_driver_register(const struct ofono_lte_driver *d);
+-- 
+2.7.4
+

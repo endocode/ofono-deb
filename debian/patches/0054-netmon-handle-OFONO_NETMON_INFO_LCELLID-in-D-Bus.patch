@@ -1,0 +1,31 @@
+From 606494b91bd902560069e060d5b48ddd8845d24f Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 17 Nov 2016 10:36:21 +0100
+Subject: [PATCH 54/58] netmon: handle OFONO_NETMON_INFO_LCELLID in D-Bus
+
+Change-Id: Iaea231ac0b17006d37cdd179aae72fa8c486bc01
+---
+ src/netmon.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/netmon.c b/src/netmon.c
+index 75359db..185d508 100644
+--- a/src/netmon.c
++++ b/src/netmon.c
+@@ -253,6 +253,13 @@ void ofono_netmon_serving_cell_notify(struct ofono_netmon *netmon,
+ 					intval, uint16_t, DBUS_TYPE_UINT16);
+ 			break;
+ 
++		case OFONO_NETMON_INFO_LCELLID:
++			intval = va_arg(arglist, int);
++
++			CELL_INFO_DICT_APPEND(&dict, "E-UTRANCellId",
++					intval, uint32_t, DBUS_TYPE_UINT32);
++			break;
++
+ 		case OFONO_NETMON_INFO_LSINR:
+ 			intval = va_arg(arglist, double);
+ 
+-- 
+2.7.4
+

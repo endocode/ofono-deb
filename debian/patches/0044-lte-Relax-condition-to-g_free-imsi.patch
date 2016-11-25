@@ -1,0 +1,32 @@
+From 731be3a409b46212863189546d75a8fc1488bf41 Mon Sep 17 00:00:00 2001
+From: Denis Kenzior <denkenz@gmail.com>
+Date: Tue, 15 Nov 2016 13:39:44 -0600
+Subject: [PATCH 44/58] lte: Relax condition to g_free imsi
+
+imsi malloc is not directly tied to l_settings being valid
+---
+ src/lte.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lte.c b/src/lte.c
+index 799ebd7..362a2b9 100644
+--- a/src/lte.c
++++ b/src/lte.c
+@@ -230,11 +230,11 @@ static void lte_atom_remove(struct ofono_atom *atom)
+ 	if (lte == NULL)
+ 		return;
+ 
++	g_free(lte->imsi);
++	lte->imsi = NULL;
++
+ 	if (lte->settings) {
+ 		storage_close(lte->imsi, SETTINGS_STORE, lte->settings, TRUE);
+-
+-		g_free(lte->imsi);
+-		lte->imsi = NULL;
+ 		lte->settings = NULL;
+ 	}
+ 
+-- 
+2.7.4
+

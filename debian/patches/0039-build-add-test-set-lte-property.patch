@@ -1,0 +1,27 @@
+From 04b8e334f1c521b2542c90ffd0b90687db124f17 Mon Sep 17 00:00:00 2001
+From: Denis Kenzior <denkenz@gmail.com>
+Date: Fri, 11 Nov 2016 10:49:00 -0600
+Subject: [PATCH 39/58] build: add test/set-lte-property
+
+Change-Id: I2b699e49ca376c074b9c40c54544c886f8f34b68
+---
+ Makefile.am | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index abf4c0c..553c2a0 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -752,7 +752,8 @@ test_scripts = test/backtrace \
+ 		test/set-sms-smsc \
+ 		test/set-sms-bearer \
+ 		test/get-serving-cell-info \
+-		test/list-allowed-access-points
++		test/list-allowed-access-points \
++		test/set-lte-property
+ 
+ if TEST
+ testdir = $(pkglibdir)/test
+-- 
+2.7.4
+

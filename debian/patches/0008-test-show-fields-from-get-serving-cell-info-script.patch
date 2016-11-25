@@ -1,0 +1,56 @@
+From b010aa77730c0f10b277345daa29880659f510e2 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 20 Oct 2016 14:04:03 +0200
+Subject: [PATCH 08/58] test: show fields from get-serving-cell-info script
+
+Change-Id: I743c53a88443d13457b048858e2a596d1354418e
+---
+ test/get-serving-cell-info | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 05dc9fe..92434a0 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -26,6 +26,12 @@ cid = 'CellId'
+ psc = 'PrimaryScramblingCode'
+ rssi = 'Strength'
+ ber = 'BitErrorRate'
++rxlev = 'ReceivedSignalStrength'
++rscp = 'ReceivedSignalCodePower'
++ecn0 = 'ReceivedEnergyRatio'
++rsrq = 'ReferenceSignalReceivedQuality'
++rsrp = 'ReferenceSignalReceivedPower'
++op = 'Operator'
+ 
+ print("Current serving cell information:")
+ 
+@@ -50,7 +56,25 @@ if psc in servingcell:
+ if rssi in servingcell:
+ 	print("    [ Signal Strength = %d]" % (servingcell[rssi]))
+ 
++if rxlev in servingcell:
++	print("    [ Received Signal Strength = %d]" % (servingcell[rxlev]))
++
+ if ber in servingcell:
+ 	print("    [ Bit Error Rate = %d]" % (servingcell[ber]))
+ 
++if rscp in servingcell:
++	print("    [ Received Signal Code Power = %f]" % (servingcell[rscp]))
++
++if ecn0 in servingcell:
++	print("    [ Received Energy Ratio = %d]" % (servingcell[ecn0]))
++
++if rsrq in servingcell:
++	print("    [ Reference Signal Received Quality = %f]" % (servingcell[rsrq]))
++
++if rsrp in servingcell:
++	print("    [ Reference Signal Received Power = %d]" % (servingcell[rsrp]))
++
++if op in servingcell:
++	print("    [ Operator = %s ]" % (servingcell[op]))
++
+ print('')
+-- 
+2.7.4
+

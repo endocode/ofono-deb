@@ -1,0 +1,32 @@
+From c8fdadd4bf1034adcf7233dcf2fa33006c332e65 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 12:04:04 +0100
+Subject: [PATCH 25/58] netmon: OFONO_NETMON_INFO_LSINR in D-Bus as double
+
+Change-Id: I95c80421157d63be3e834a5a5329a2411529141c
+---
+ src/netmon.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/netmon.c b/src/netmon.c
+index 44dc583..12e8dca 100644
+--- a/src/netmon.c
++++ b/src/netmon.c
+@@ -253,11 +253,11 @@ void ofono_netmon_serving_cell_notify(struct ofono_netmon *netmon,
+ 					intval, uint16_t, DBUS_TYPE_UINT16);
+ 			break;
+ 
+-		case OFONO_NETMON_INFO_SINR:
+-			intval = va_arg(arglist, int);
++		case OFONO_NETMON_INFO_LSINR:
++			intval = va_arg(arglist, double);
+ 
+ 			CELL_INFO_DICT_APPEND(&dict, "SignalNoiseRatio",
+-					intval, uint8_t, DBUS_TYPE_BYTE);
++					intval, double, DBUS_TYPE_DOUBLE);
+ 			break;
+ 
+ 		case OFONO_NETMON_INFO_CQI:
+-- 
+2.7.4
+

@@ -1,0 +1,28 @@
+From 4c81b25e83d7e4428d1413c3eaf534a23786a4ee Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Tue, 15 Nov 2016 15:08:19 +0100
+Subject: [PATCH 47/58] build: add support for ublox lte atom driver
+
+Change-Id: Iff859c2718564e40d0655db98533ce4afe07b993
+---
+ Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index e612a34..faf3ef6 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -381,8 +381,8 @@ builtin_modules += ubloxmodem
+ builtin_sources += drivers/ubloxmodem/ubloxmodem.h \
+ 			drivers/ubloxmodem/ubloxmodem.c \
+ 			drivers/ubloxmodem/gprs-context.c \
+-			drivers/ubloxmodem/netmon.c
+-
++			drivers/ubloxmodem/netmon.c \
++			drivers/ubloxmodem/lte.c
+ 
+ if PHONESIM
+ builtin_modules += phonesim
+-- 
+2.7.4
+

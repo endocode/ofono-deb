@@ -1,0 +1,34 @@
+From 113a1c63ab57acf6bf95eb088e7ba1f5e8b747f5 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Tue, 15 Nov 2016 15:08:17 +0100
+Subject: [PATCH 43/58] build: add lte atom support
+
+---
+ Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 553c2a0..e612a34 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -22,7 +22,7 @@ pkginclude_HEADERS = include/log.h include/plugin.h include/history.h \
+ 			include/private-network.h include/cdma-netreg.h \
+ 			include/cdma-provision.h include/handsfree.h \
+ 			include/handsfree-audio.h include/siri.h \
+-			include/netmon.h
++			include/netmon.h include/lte.h
+ 
+ nodist_pkginclude_HEADERS = include/version.h
+ 
+@@ -604,7 +604,7 @@ src_ofonod_SOURCES = $(builtin_sources) $(gatchat_sources) src/ofono.ver \
+ 			src/cdma-provision.c src/handsfree.c \
+ 			src/handsfree-audio.c src/bluetooth.h \
+ 			src/hfp.h src/siri.c \
+-			src/netmon.c
++			src/netmon.c src/lte.c
+ 
+ src_ofonod_LDADD = gdbus/libgdbus-internal.la $(builtin_libadd) \
+ 			@GLIB_LIBS@ @DBUS_LIBS@ -ldl
+-- 
+2.7.4
+

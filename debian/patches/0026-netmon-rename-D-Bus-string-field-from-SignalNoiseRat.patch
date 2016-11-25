@@ -1,0 +1,30 @@
+From 444ebcb18188912cfbaf609cec8bb5e6a7c63524 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 12:07:30 +0100
+Subject: [PATCH 26/58] netmon: rename D-Bus string field from SignalNoiseRatio
+ to E-UTRANSignalNoiseRatio
+
+Rename string field from SignalNoiseRatio to E-UTRANSignalNoiseRatio
+this way we strictly follow the ublox manual.
+
+Change-Id: I955e36e3ed70e8a44b4b8a267eee7f90f45fa274
+---
+ src/netmon.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/netmon.c b/src/netmon.c
+index 12e8dca..75359db 100644
+--- a/src/netmon.c
++++ b/src/netmon.c
+@@ -256,7 +256,7 @@ void ofono_netmon_serving_cell_notify(struct ofono_netmon *netmon,
+ 		case OFONO_NETMON_INFO_LSINR:
+ 			intval = va_arg(arglist, double);
+ 
+-			CELL_INFO_DICT_APPEND(&dict, "SignalNoiseRatio",
++			CELL_INFO_DICT_APPEND(&dict, "E-UTRANSignalNoiseRatio",
+ 					intval, double, DBUS_TYPE_DOUBLE);
+ 			break;
+ 
+-- 
+2.7.4
+

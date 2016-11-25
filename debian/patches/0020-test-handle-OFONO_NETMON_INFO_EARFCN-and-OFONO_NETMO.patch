@@ -1,0 +1,45 @@
+From 1aea8588435d55e54450a8d8e75850f4aa04445c Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 10 Nov 2016 11:59:43 +0100
+Subject: [PATCH 20/58] test: handle OFONO_NETMON_INFO_EARFCN and
+ OFONO_NETMON_INFO_LBAND
+
+Change-Id: I913920dcd678cc3da9d3c80913917d6507b7af81
+---
+ test/get-serving-cell-info | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/test/get-serving-cell-info b/test/get-serving-cell-info
+index 62265ac..298398f 100755
+--- a/test/get-serving-cell-info
++++ b/test/get-serving-cell-info
+@@ -32,8 +32,8 @@ ecn0 = 'ReceivedEnergyRatio'
+ rsrq = 'ReferenceSignalReceivedQuality'
+ rsrp = 'ReferenceSignalReceivedPower'
+ op = 'Operator'
+-arfcn = 'ARFCN'
+-band = 'Band'
++earfcn = 'EARFCN'
++lband = 'LBand'
+ ul_BW = 'UplinkResourceBlocks'
+ dl_BW = 'DownlinkResourceBlocks'
+ tac = 'TrackingAreaCode'
+@@ -85,11 +85,11 @@ if rsrp in servingcell:
+ if op in servingcell:
+ 	print("    [ Operator = %s ]" % (servingcell[op]))
+ 
+-if arfcn in servingcell:
+-	print("    [ Absolue Radio Frequency Channel = %d ]" % (servingcell[arfcn]))
++if earfcn in servingcell:
++	print("    [ E-UTRAN Absolue Radio Frequency Channel = %d ]" % (servingcell[earfcn]))
+ 
+-if band in servingcell:
+-	print("    [ Band = %d ]" % (servingcell[band]))
++if lband in servingcell:
++	print("    [ LBand = %d ]" % (servingcell[Lband]))
+ 
+ if ul_BW in servingcell:
+ 	print("    [ Uplink Resource Blocks = %d ]" % (servingcell[ul_BW]))
+-- 
+2.7.4
+

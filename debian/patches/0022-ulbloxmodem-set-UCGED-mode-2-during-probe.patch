@@ -1,0 +1,42 @@
+From 7b877ddc72b2c04ca500ef28ca41266111bf10a4 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 11:20:51 +0100
+Subject: [PATCH 22/58] ulbloxmodem: set +UCGED mode 2 during probe
+
+Set +UCGED mode 2 during probe this way it allows us to work for both
+mode 2 and mode 3.
+
+Change-Id: I3d2e75776225c181909f0e295a4d34e65549b9c6
+---
+ drivers/ubloxmodem/netmon.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/ubloxmodem/netmon.c b/drivers/ubloxmodem/netmon.c
+index e5b4039..291cfaa 100644
+--- a/drivers/ubloxmodem/netmon.c
++++ b/drivers/ubloxmodem/netmon.c
+@@ -676,10 +676,6 @@ static void ublox_netmon_request_update(struct ofono_netmon *netmon,
+ 		return;
+ 	}
+ 
+-	/* Set +UCGED=2 mode as early as possible */
+-	g_at_chat_send(nmd->aux, "AT+UCGED=2", ucged_prefix,
+-		       NULL, NULL, NULL);
+-
+ 	if (g_at_chat_send(nmd->aux, "AT+COPS?", cops_prefix,
+ 			   cops_cb, cbd, NULL) == 0) {
+ 		CALLBACK_WITH_FAILURE(cb, data);
+@@ -705,6 +701,10 @@ static int ublox_netmon_probe(struct ofono_netmon *netmon,
+ 
+ 	ofono_netmon_set_data(netmon, nmd);
+ 
++	/* Set +UCGED=2 mode as early as possible */
++	g_at_chat_send(nmd->aux, "AT+UCGED=2", ucged_prefix,
++		       NULL, NULL, NULL);
++
+ 	g_idle_add(ublox_delayed_register, netmon);
+ 
+ 	return 0;
+-- 
+2.7.4
+

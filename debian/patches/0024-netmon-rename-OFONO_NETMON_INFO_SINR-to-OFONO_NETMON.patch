@@ -1,0 +1,27 @@
+From 585e378bfd7a8cdd62c606846e5f360e3c663a00 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Tue, 15 Nov 2016 12:03:13 +0100
+Subject: [PATCH 24/58] netmon: rename OFONO_NETMON_INFO_SINR to
+ OFONO_NETMON_INFO_LSINR
+
+Change-Id: I7e74c8c578e6863b14715f740b77dae8ffdc642b
+---
+ include/netmon.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/netmon.h b/include/netmon.h
+index 1e380c9..152218a 100644
+--- a/include/netmon.h
++++ b/include/netmon.h
+@@ -69,7 +69,7 @@ enum ofono_netmon_info {
+ 	OFONO_NETMON_INFO_UL_BW, /* int */
+ 	OFONO_NETMON_INFO_DL_BW, /* int */
+ 	OFONO_NETMON_INFO_TAC, /* int */
+-	OFONO_NETMON_INFO_SINR, /* int */
++	OFONO_NETMON_INFO_LSINR, /* double */
+ 	OFONO_NETMON_INFO_CQI, /* int */
+ 	OFONO_NETMON_INFO_AVG_RSRP, /* int */
+ 	OFONO_NETMON_INFO_INVALID,
+-- 
+2.7.4
+

@@ -1,0 +1,34 @@
+From c4fd4d7e16f3c768fdbc11ed30acd412243c1e36 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Mon, 7 Nov 2016 15:32:22 +0100
+Subject: [PATCH 11/58] netmon:ubloxmodem: Add +UCGED network monitor types
+
+These property types will be used by the +UCGED command to get the
+corresponding values. This is a prepartion patch.
+
+Change-Id: I49f06a273d3a78158007691451939804144bf47e
+---
+ include/netmon.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/netmon.h b/include/netmon.h
+index abde225..c6ee243 100644
+--- a/include/netmon.h
++++ b/include/netmon.h
+@@ -64,6 +64,13 @@ enum ofono_netmon_info {
+ 	OFONO_NETMON_INFO_RSRQ, /* int */
+ 	OFONO_NETMON_INFO_RSRP, /* int */
+ 	OFONO_NETMON_INFO_OPERATOR, /* char *, up to 24 digits */
++	OFONO_NETMON_INFO_BAND, /* int */
++	OFONO_NETMON_INFO_UL_BW, /* int */
++	OFONO_NETMON_INFO_DL_BW, /* int */
++	OFONO_NETMON_INFO_TAC, /* int */
++	OFONO_NETMON_INFO_SINR, /* int */
++	OFONO_NETMON_INFO_CQI, /* int */
++	OFONO_NETMON_INFO_AVG_RSRP, /* int */
+ 	OFONO_NETMON_INFO_INVALID,
+ };
+ 
+-- 
+2.7.4
+

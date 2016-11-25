@@ -1,0 +1,41 @@
+From 15eff4441756294e41f228b9b7541732fe25ce91 Mon Sep 17 00:00:00 2001
+From: Dragos Tatulea <dragos@endocode.com>
+Date: Tue, 22 Nov 2016 11:16:42 +0100
+Subject: [PATCH 58/58] lte: fix early imsi free
+
+storage_close was creating an empty sync file in /var/lib/ofono/lte
+when it should have been closing the proper file
+/var/lig/ofono/<imsi>/lte.
+
+Change-Id: Ibce7334aaf40acbe83ee2c8711a9ec2e6db5a558
+---
+ src/lte.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/lte.c b/src/lte.c
+index 82da868..518103a 100644
+--- a/src/lte.c
++++ b/src/lte.c
+@@ -259,9 +259,6 @@ static void lte_atom_remove(struct ofono_atom *atom)
+ 	if (lte == NULL)
+ 		return;
+ 
+-	g_free(lte->imsi);
+-	lte->imsi = NULL;
+-
+ 	if (lte->settings) {
+ 		storage_close(lte->imsi, SETTINGS_STORE, lte->settings, TRUE);
+ 		lte->settings = NULL;
+@@ -270,6 +267,9 @@ static void lte_atom_remove(struct ofono_atom *atom)
+ 	if (lte->driver && lte->driver->remove)
+ 		lte->driver->remove(lte);
+ 
++	g_free(lte->imsi);
++	lte->imsi = NULL;
++
+ 	g_free(lte);
+ }
+ 
+-- 
+2.7.4
+

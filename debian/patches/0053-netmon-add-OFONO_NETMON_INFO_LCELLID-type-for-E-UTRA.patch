@@ -1,0 +1,26 @@
+From c1f039a7eacf094d6d64bf7386ec2082b4b5cce8 Mon Sep 17 00:00:00 2001
+From: Djalal Harouni <djalal@endocode.com>
+Date: Thu, 17 Nov 2016 10:35:41 +0100
+Subject: [PATCH 53/58] netmon: add OFONO_NETMON_INFO_LCELLID type for E-UTRAN
+ Cell ID
+
+Change-Id: If702a610c2534a555ceac5d4369cb0d775fd72f3
+---
+ include/netmon.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/netmon.h b/include/netmon.h
+index 152218a..dffae99 100644
+--- a/include/netmon.h
++++ b/include/netmon.h
+@@ -69,6 +69,7 @@ enum ofono_netmon_info {
+ 	OFONO_NETMON_INFO_UL_BW, /* int */
+ 	OFONO_NETMON_INFO_DL_BW, /* int */
+ 	OFONO_NETMON_INFO_TAC, /* int */
++	OFONO_NETMON_INFO_LCELLID, /* int */
+ 	OFONO_NETMON_INFO_LSINR, /* double */
+ 	OFONO_NETMON_INFO_CQI, /* int */
+ 	OFONO_NETMON_INFO_AVG_RSRP, /* int */
+-- 
+2.7.4
+
